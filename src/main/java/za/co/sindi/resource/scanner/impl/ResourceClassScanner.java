@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -17,7 +16,6 @@ import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import za.co.sindi.commons.io.UncheckedException;
 import za.co.sindi.commons.utils.Classes;
 import za.co.sindi.resource.Resource;
 import za.co.sindi.resource.scanner.ClassScanner;
@@ -35,12 +33,12 @@ public class ResourceClassScanner implements ClassScanner {
 	private List<TypeFilter> typeFilters = new ArrayList<>();
 	private ClassLoader classLoader;
 	
-	/**
-	 * 
-	 */
-	public ResourceClassScanner() {
-		this(Classes.getClassLoader());
-	}
+//	/**
+//	 * 
+//	 */
+//	public ResourceClassScanner() {
+//		this(Classes.getClassLoader());
+//	}
 
 	/**
 	 * @param classLoader
@@ -95,19 +93,16 @@ public class ResourceClassScanner implements ClassScanner {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new UncheckedIOException(e);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			throw new UncheckedException(e);
 		}
 		
 		return Collections.unmodifiableSet(classes);
 	}
 		
-	private void scanJarEntries(URL jarURL, Set<Class<?>> classes) throws IOException, ClassNotFoundException {
+	private void scanJarEntries(URL jarURL, Set<Class<?>> classes) throws IOException {
 		JarURLConnection jarConn = (JarURLConnection) jarURL.openConnection();
 		JarFile jarFile = jarConn.getJarFile();
 		Enumeration<JarEntry> entries = jarFile.entries();
-		URLClassLoader classLoader = new URLClassLoader(new URL[] {jarURL});
+//		URLClassLoader classLoader = new URLClassLoader(new URL[] {jarURL});
 		while (entries != null && entries.hasMoreElements()) {
 			JarEntry entry = entries.nextElement();
 			if (entry.isDirectory()) continue;
@@ -121,7 +116,7 @@ public class ResourceClassScanner implements ClassScanner {
 		}
 		
 		//Finally
-		classLoader.close();
+//		classLoader.close();
 	}
 	
 	private void filterMatchAndSetClass(final String className, final ClassLoader classLoader, final Set<Class<?>> classes) {
@@ -132,10 +127,11 @@ public class ResourceClassScanner implements ClassScanner {
 				clazz = Classes.getClass(classLoader, _className, false);
 				if (typeFilterMatch(clazz)) {
 					classes.add(clazz);
+					LOGGER.info("Found matching class '" + _className + "'.");
 				}
-			} catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException | LinkageError e) {
 				// TODO Auto-generated catch block
-				LOGGER.info("Failed to find class of type '" + _className + "'.");
+				LOGGER.warning("Failed to find class of type '" + _className + "' (" + e.getClass().getName() + ": " + e.getLocalizedMessage() + ").");
 			}
 		}
 	}
@@ -145,12 +141,16 @@ public class ResourceClassScanner implements ClassScanner {
 	}
 	
 	private boolean shouldScanClass(String className) {
+//		LOGGER.info("Class name: " + className);
 		return (!className.startsWith("java.") && 
 				!className.startsWith("javax.") && 
-				!className.startsWith("jdk.") &&
-				!className.startsWith("com.sun.") &&
-				!className.startsWith("sun.") &&
-				!className.startsWith("jakarta."));
+				!className.startsWith("jdk.") && 
+				!className.startsWith("com.sun.") && 
+				!className.startsWith("sun.") && 
+				!className.startsWith("jakarta.") && 
+				!className.startsWith("META-INF.") && 
+				!className.endsWith("package-info") && 
+				!className.endsWith("module-info"));
 	}
 	
 	private boolean typeFilterMatch(Class<?> clazz) {

@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
 
-import za.co.sindi.commons.utils.Classes;
 import za.co.sindi.resource.Resource;
 import za.co.sindi.resource.impl.FileResource;
 import za.co.sindi.resource.scanner.PathAwareResourceScanner;
@@ -21,6 +20,8 @@ import za.co.sindi.resource.scanner.ScanningException;
  *
  */
 public class ClassLoaderResourceScanner extends PathAwareResourceScanner {
+	
+	private ClassLoader classLoader;
 
 	/**
 	 * 
@@ -34,7 +35,8 @@ public class ClassLoaderResourceScanner extends PathAwareResourceScanner {
 	 * @param classLoader
 	 */
 	public ClassLoaderResourceScanner(ClassLoader classLoader) {
-		super(classLoader != null ? classLoader : Classes.getClassLoader());
+		super();
+		this.classLoader = classLoader;
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +46,7 @@ public class ClassLoaderResourceScanner extends PathAwareResourceScanner {
 	protected void scan(String path, Collection<Resource> resources) throws ScanningException {
 		// TODO Auto-generated method stub
 		try {
-			Enumeration<URL> enumResources = getClassLoader().getResources(path);
+			Enumeration<URL> enumResources = classLoader.getResources(path);
 			if (enumResources != null) {
 				while (enumResources.hasMoreElements()) {
 					URL resource = enumResources.nextElement();

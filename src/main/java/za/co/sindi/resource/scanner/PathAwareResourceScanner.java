@@ -25,13 +25,13 @@ public abstract class PathAwareResourceScanner extends AbstractResourceScanner {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param classLoader
-	 */
-	protected PathAwareResourceScanner(ClassLoader classLoader) {
-		super(classLoader);
-		// TODO Auto-generated constructor stub
-	}
+//	/**
+//	 * @param classLoader
+//	 */
+//	protected PathAwareResourceScanner(ClassLoader classLoader) {
+//		super(classLoader);
+//		// TODO Auto-generated constructor stub
+//	}
 
 	public void addResourcePath(String resourcePath) {
 		if (resourcePath != null && !resourcePath.isEmpty()) {

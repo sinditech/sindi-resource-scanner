@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import za.co.sindi.commons.utils.Classes;
 import za.co.sindi.resource.Resource;
 
 /**
@@ -21,23 +20,24 @@ public abstract class AbstractResourceScanner implements ResourceScanner {
 
 	protected final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 	private List<ResourceFilter> resourceFilters = new ArrayList<>();
-	private ClassLoader classLoader;
+//	private ClassLoader classLoader;
 	
 	/**
 	 * 
 	 */
 	protected AbstractResourceScanner() {
-		this(null);
+//		this(null);
+		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @param classLoader
-	 */
-	protected AbstractResourceScanner(ClassLoader classLoader) {
-		super();
-		this.classLoader = classLoader;
-	}
+//	/**
+//	 * @param classLoader
+//	 */
+//	protected AbstractResourceScanner(ClassLoader classLoader) {
+//		super();
+//		this.classLoader = classLoader;
+//	}
 
 	/* (non-Javadoc)
 	 * @see za.co.sindi.resource.scanner.ResourceScanner#addResourceFilter(za.co.sindi.resource.scanner.ResourceFilter)
@@ -50,18 +50,18 @@ public abstract class AbstractResourceScanner implements ResourceScanner {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see za.co.sindi.oauth.server.scanner.ResourceScanner#getClassLoader()
-	 */
-	@Override
-	public ClassLoader getClassLoader() {
-		// TODO Auto-generated method stub
-		if (classLoader == null) {
-			classLoader = Classes.getClassLoader();
-		}
-		
-		return classLoader;
-	}
+//	/* (non-Javadoc)
+//	 * @see za.co.sindi.oauth.server.scanner.ResourceScanner#getClassLoader()
+//	 */
+//	@Override
+//	public ClassLoader getClassLoader() {
+//		// TODO Auto-generated method stub
+//		if (classLoader == null) {
+//			classLoader = Classes.getClassLoader();
+//		}
+//		
+//		return classLoader;
+//	}
 
 	/* (non-Javadoc)
 	 * @see za.co.sindi.resource.scanner.ResourceScanner#scan()

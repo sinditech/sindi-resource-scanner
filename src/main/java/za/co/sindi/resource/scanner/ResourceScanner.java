@@ -16,5 +16,5 @@ public interface ResourceScanner {
 
 	public void addResourceFilter(ResourceFilter filter);
 	public Collection<Resource> scan() throws ScanningException;
-	public ClassLoader getClassLoader();
+//	public ClassLoader getClassLoader();
 }
