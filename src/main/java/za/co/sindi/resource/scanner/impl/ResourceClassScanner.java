@@ -131,7 +131,7 @@ public class ResourceClassScanner implements ClassScanner {
 				}
 			} catch (ClassNotFoundException | LinkageError e) {
 				// TODO Auto-generated catch block
-				LOGGER.warning("Failed to find class of type '" + _className + "' (" + e.getClass().getName() + ": " + e.getLocalizedMessage() + ").");
+				LOGGER.warning("Failed to find class of type '" + _className + "' (reason, " + e.getClass().getName() + ": " + e.getLocalizedMessage() + ").");
 			}
 		}
 	}
